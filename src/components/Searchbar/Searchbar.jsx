@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import styles from './Searchbar.module.css';
 
 class Searchbar extends Component {
@@ -7,16 +8,17 @@ class Searchbar extends Component {
     }
 
     handleChange = event => {
-        const { name, value } = event.currentTarget;
-
-        this.setState({ [name]: value });
+        this.setState({ word: event.currentTarget.value.toLowerCase() });
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
 
-        this.props.onSubmit(this.state);
+        if (this.state.word.trim() === '') {
+            return Notify.warning('Please enter any word');
+        }
 
+        this.props.onSubmit(this.state.word);
         this.setState({ word: '' });
     };
 
@@ -32,6 +34,7 @@ class Searchbar extends Component {
                     <input
                         onChange={this.handleChange}
                         name="word"
+                        value={this.state.word}
                         className={styles.input}
                         type="text"
                         // autocomplete="off"
