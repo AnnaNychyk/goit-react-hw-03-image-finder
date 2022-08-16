@@ -1,30 +1,27 @@
-import { Component } from "react";
+import PropTypes from "prop-types";
+import styles from "./ImageGallery.module.css";
+import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 
-class ImageGallery extends Component {
-    state = {
-        word: null,
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.word !== this.props.word) {
-            console.log('Change enter word')
-            console.log('this.props.word: ', this.props.word);
-
-
-            fetch(`https://pixabay.com/api/?q=${this.props.word}&page=1&key=25809768-5f151ed3e9c60947c53759114&image_type=photo&orientation=horizontal&per_page=12`).then(response => response.json()).then(
-                // console.log
-                word => this.setState({word})
-            );
-        }
-    }
-
-    render() {
+function ImageGallery({ images }) {
+  return (
+    <ul className={styles.gallery}>
+      {images.map(({ tags, webformatURL, id, largeImageURL }) => {
         return (
-            <div>
-                {this.state.word && <p>{this.state.word.totalHits}</p>}
-            </div>
-        )
-    }
+          <ImageGalleryItem
+            key={id}
+            image={webformatURL}
+            alt={tags}
+            // onModalClick={() => openModal(largeImageURL)}
+          />
+        );
+      })}
+    </ul>
+  );
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.object),
+  openModal: PropTypes.func,
+};
 
 export default ImageGallery;
