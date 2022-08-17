@@ -1,13 +1,6 @@
-.galleryItem:not(:last-child) {
-    margin-bottom: 10px;
-    margin-right: 10px;
-
-    
-
-}
-
 .galleryItem {
-    
+    margin-bottom: 10px;
+        margin-right: 10px;
 }
 
 .image {

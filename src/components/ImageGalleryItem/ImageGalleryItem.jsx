@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import styles from "./ImageGalleryItem.module.css";
 
-function ImageGalleryItem({ image, alt, onModalClick }) {
+function ImageGalleryItem({ image, alt, onClickModal }) {
   return (
-    <li className={styles.galleryItem} onClick={onModalClick}>
+    <li className={styles.galleryItem} onClick={onClickModal}>
       <img src={image} alt={alt} className={styles.image} />
     </li>
   );

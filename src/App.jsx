@@ -1,9 +1,11 @@
 import { Component } from "react";
-// import { Notify } from "notiflix/build/notiflix-notify-aio";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 import Searchbar from "./components/Searchbar/Searchbar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import fetchImages from "./services/api";
 import Button from "./components/Button/Button";
+import Loader from "./components/Loader/Loader";
+import Modal from "./components/Modal/Modal";
 
 class App extends Component {
   state = {
@@ -12,14 +14,18 @@ class App extends Component {
     loading: false,
     images: [],
     error: null,
+    showModal: false,
+    largeImageURL: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const { searchWord, page } = this.state;
 
-    // if (images.length === 0) {
-    //   return Notify.failure("There is no photo at your request");
-    // }
+    //  if (this.state.images === []) {
+    //    return Notify.failure(
+    //      "Sorry, there are no images matching your search query."
+    //    );
+    //  }
 
     if (prevState.searchWord !== searchWord || prevState.page !== page) {
       this.setState({ loading: true });
@@ -50,34 +56,32 @@ class App extends Component {
     }));
   };
 
-  showButton = () => {
-    const { loading } = this.state;
-    if (loading) {
-      return false;
-    }
-    return true;
-    // if (items.length === totalHits) {
-    //   return false;
-    // }
-    // if (totalHits > items.length) {
-    //   return true;
-    // }
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
   };
 
   render() {
-    const { images, loading } = this.state;
+    const { images, loading, showModal, tags } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        {/* {error && <p>Whoops, something went wrong: {error.message}</p>} */}
+        {loading && <Loader />}
 
-        {loading && <p>Loading...</p>}
-
-        <ImageGallery images={images} />
+        <ImageGallery images={images} onOpenModal={this.toggleModal} />
 
         {images.length !== 0 && loading !== true && (
           <Button onMoreClick={this.handleLoadMore} />
+        )}
+
+        {showModal && (
+          <Modal
+            largeImageURL={images.largeImageURL}
+            tags={tags}
+            onCloseModal={this.toggleModal}
+          ></Modal>
         )}
       </>
     );

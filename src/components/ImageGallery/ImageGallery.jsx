@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styles from "./ImageGallery.module.css";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 
-function ImageGallery({ images }) {
+function ImageGallery({ images, onOpenModal }) {
   return (
     <ul className={styles.gallery}>
       {images.map(({ tags, webformatURL, id, largeImageURL }) => {
@@ -11,7 +11,7 @@ function ImageGallery({ images }) {
             key={id}
             image={webformatURL}
             alt={tags}
-            // onModalClick={() => openModal(largeImageURL)}
+            onClickModal={() => onOpenModal(largeImageURL)}
           />
         );
       })}
