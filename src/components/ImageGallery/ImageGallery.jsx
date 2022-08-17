@@ -11,6 +11,7 @@ function ImageGallery({ images, onOpenModal }) {
             key={id}
             image={webformatURL}
             alt={tags}
+            largeImageURL={largeImageURL}
             onClickModal={() => onOpenModal(largeImageURL)}
           />
         );

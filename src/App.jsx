@@ -15,7 +15,7 @@ class App extends Component {
     images: [],
     error: null,
     showModal: false,
-    largeImageURL: null,
+    largeImageURL: "",
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -56,21 +56,28 @@ class App extends Component {
     }));
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+  openModal = (largeImageURL) => {
+    this.setState({
+      showModal: true,
+      largeImageURL: largeImageURL,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      showModal: false,
+    });
   };
 
   render() {
-    const { images, loading, showModal, tags } = this.state;
+    const { images, loading, showModal, tags, largeImageURL } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
         {loading && <Loader />}
 
-        <ImageGallery images={images} onOpenModal={this.toggleModal} />
+        <ImageGallery images={images} onOpenModal={this.openModal} />
 
         {images.length !== 0 && loading !== true && (
           <Button onMoreClick={this.handleLoadMore} />
@@ -78,9 +85,9 @@ class App extends Component {
 
         {showModal && (
           <Modal
-            largeImageURL={images.largeImageURL}
+            largeImageURL={largeImageURL}
             tags={tags}
-            onCloseModal={this.toggleModal}
+            onCloseModal={this.closeModal}
           ></Modal>
         )}
       </>
