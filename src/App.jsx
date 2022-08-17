@@ -16,6 +16,7 @@ class App extends Component {
     error: null,
     showModal: false,
     largeImageURL: "",
+    totalHits: "",
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,8 +33,10 @@ class App extends Component {
 
       fetchImages(this.state)
         .then((res) => {
-          const images = [...this.state.images, ...res.hits];
-          this.setState({ images });
+          this.setState({
+            images: [...this.state.images, ...res.hits],
+            totalHits: res.totalHits,
+          });
         })
         .catch((res) => {
           console.log(res);
@@ -69,6 +72,19 @@ class App extends Component {
     });
   };
 
+  showButton = () => {
+    const { images, loading, totalHits } = this.state;
+    if (loading) {
+      return false;
+    }
+    if (images.length === totalHits) {
+      return false;
+    }
+    if (totalHits > images.length) {
+      return true;
+    }
+  };
+
   render() {
     const { images, loading, showModal, tags, largeImageURL } = this.state;
     return (
@@ -79,16 +95,14 @@ class App extends Component {
 
         <ImageGallery images={images} onOpenModal={this.openModal} />
 
-        {images.length !== 0 && loading !== true && (
-          <Button onMoreClick={this.handleLoadMore} />
-        )}
+        {this.showButton() && <Button onMoreClick={this.handleLoadMore} />}
 
         {showModal && (
           <Modal
             largeImageURL={largeImageURL}
             tags={tags}
             onCloseModal={this.closeModal}
-          ></Modal>
+          />
         )}
       </>
     );
